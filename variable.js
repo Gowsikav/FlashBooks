@@ -22,6 +22,21 @@ var bookdescriptioninput = document.getElementById("book-description-input");
 
 addbook.addEventListener("click", function (event) {
   event.preventDefault();
+
+  var bookTitle = booktitleinput.value;
+  if (bookTitle === "" || !isNaN(bookTitle) || /\d/.test(bookTitle)) {
+    alert("Please enter a valid book title that is not empty or a number");
+    booktitleinput.value = "";
+    return;
+  }
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  const date = `${year}-${month}-${day} ${hours}:${minutes}`;
+
   var div = document.createElement("div");
   div.setAttribute("class", "book-container");
   div.innerHTML = `<h2>${booktitleinput.value}</h2>
@@ -29,9 +44,8 @@ addbook.addEventListener("click", function (event) {
         <p>
           ${bookdescriptioninput.value}
         </p>
-        
+        <p>${date}</p>
         <button onclick="deletebook(event)">Delete</button>`;
-
   container.append(div);
   popupoverlay.style.display = "none";
   popupbox.style.display = "none";
@@ -40,5 +54,8 @@ addbook.addEventListener("click", function (event) {
   booktitleinput.value = "";
 });
 function deletebook(event) {
-  event.target.parentElement.remove();
+  let r = confirm("Want to delete?");
+  if (r) {
+    event.target.parentElement.remove();
+  }
 }
